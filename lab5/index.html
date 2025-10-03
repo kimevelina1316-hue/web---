@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Frontend Task №6</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .news-container {
+            width: 600px;
+        }
+
+        .news-item {
+            background-color: #ccf5f5;
+            padding: 20px;
+            margin-bottom: 10px;
+            border: 1px solid #333;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .news-item:hover {
+            background-color: #ff6666;
+        }
+
+        .news-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .news-text {
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background-color: #00cc00;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.9em;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #00aa00;
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #ffff88;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .modal-text {
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .close-btn {
+            margin-top: 20px;
+            padding: 8px 20px;
+            background-color: #ff6666;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="news-container">
+    <div class="news-item" data-id="1">
+        <div class="news-title">Новость 1</div>
+        <div class="news-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Beatae voluptatum suscipit sed delectus facere veritatis autem quisquam unde nam doloribus?</div>
+        <button class="btn">Открыть всплывающее окно</button>
+    </div>
+
+    <div class="news-item" data-id="2">
+        <div class="news-title">Новость 2</div>
+        <div class="news-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Beatae voluptatum suscipit sed delectus facere veritatis autem quisquam unde nam doloribus?</div>
+        <button class="btn">Открыть всплывающее окно</button>
+    </div>
+
+    <div class="news-item" data-id="3">
+        <div class="news-title">Новость 3</div>
+        <div class="news-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Beatae voluptatum suscipit sed delectus facere veritatis autem quisquam unde nam doloribus?</div>
+        <button class="btn">Открыть всплывающее окно</button>
+    </div>
+</div>
+
+<!-- Модальное окно -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <div class="modal-title" id="modal-title">Новость 1</div>
+        <div class="modal-text" id="modal-text">
+            Новость 1: Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet asperiores aut nihil! Corporis debitis labore fugiat id, eligendi ratione veritatis!<br><br>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam hic, ipsa, ullam, cupiditate eveniet at voluptate corrupti commodi nobis ratione voluptatem! Vel animi totam cupiditate doloribus ad ab exercitationem officia eveniet impedit? Deleniti quasi nisi consectetur perspiciatis quibusdam nostrum, enim perferendis nam, magni molestias recusandae id libero vitae, repudiandae praesentium.
+        </div>
+        <button class="close-btn" id="close-btn">Закрыть</button>
+    </div>
+</div>
+
+<script>
+    // Получаем все элементы
+    const newsItems = document.querySelectorAll('.news-item');
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalText = document.getElementById('modal-text');
+    const closeBtn = document.getElementById('close-btn');
+
+    // Тексты для каждой новости (можно расширить)
+    const newsData = {
+        1: {
+            title: "Новость 1",
+            text: "Новость 1: Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet asperiores aut nihil! Corporis debitis labore fugiat id, eligendi ratione veritatis!<br><br>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam hic, ipsa, ullam, cupiditate eveniet at voluptate corrupti commodi nobis ratione voluptatem! Vel animi totam cupiditate doloribus ad ab exercitationem officia eveniet impedit? Deleniti quasi nisi consectetur perspiciatis quibusdam nostrum, enim perferendis nam, magni molestias recusandae id libero vitae, repudiandae praesentium."
+        },
+        2: {
+            title: "Новость 2",
+            text: "Новость 2: Lorem ipsum, dolor sit amet consectetur adipisicing elit. A, alias.<br><br>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam hic, ipsa, ullam, cupiditate eveniet at voluptate corrupti commodi nobis ratione voluptatem! Vel animi totam cupiditate doloribus ad ab exercitationem officia eveniet impedit? Deleniti quasi nisi consectetur perspiciatis quibusdam nostrum, enim perferendis nam, magni molestias recusandae id libero vitae, repudiandae praesentium."
+        },
+        3: {
+            title: "Новость 3",
+            text: "Новость 3: Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, cumque?<br><br>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam hic, ipsa, ullam, cupiditate eveniet at voluptate corrupti commodi nobis ratione voluptatem! Vel animi totam cupiditate doloribus ad ab exercitationem officia eveniet impedit? Deleniti quasi nisi consectetur perspiciatis quibusdam nostrum, enim perferendis nam, magni molestias recusandae id libero vitae, repudiandae praesentium."
+        }
+    };
+
+    // Обработчик клика по блоку новости (подсветка)
+    newsItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // Сначала убираем подсветку со всех
+            newsItems.forEach(el => el.style.backgroundColor = '#ccf5f5');
+            // Затем подсвечиваем текущий
+            this.style.backgroundColor = '#ff6666';
+        });
+    });
+
+    // Обработчик клика по кнопке "Открыть всплывающее окно"
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach((btn, index) => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation(); // чтобы не срабатывало событие клика по блоку
+            const newsId = newsItems[index].dataset.id;
+            const data = newsData[newsId];
+
+            modalTitle.textContent = data.title;
+            modalText.innerHTML = data.text; // innerHTML, потому что есть <br>
+            modal.style.display = 'flex';
+        });
+    });
+
+    // Закрытие модального окна
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+
+    // Закрытие при клике вне окна
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    // Закрытие по клавише Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            modal.style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>
