@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Вся страница — flex по вертикали */
+        body {
+            background-color: #edeef0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* занимает минимум всю высоту экрана */
+        }
+
+        /* Шапка — на всю ширину */
+        header {
+            background-color: #507299;
+            color: white;
+            padding: 15px 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo-image {
+            height: 40px;
+            width: auto;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+            margin-left: 150px;
+        }
+
+        /* Основной контент (между шапкой и футером) — растягивается */
+        .main-area {
+            display: flex;
+            flex: 1; /* занимает всё свободное пространство */
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* Левое меню — тянется на всю высоту .main-area */
+       .sidebar {
+        width: 220px;
+        
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+}
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 12px;
+        }
+
+        .sidebar a {
+            color: #2e5473;
+            text-decoration: none;
+             padding: 8px 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .sidebar a:hover {
+            color: green;
+            text-decoration: underline;
+        }
+
+/* Выделенный пункт */
+.sidebar .highlight {
+    background-color: #e1e5eb;
+}
+
+        /* Основной контент справа */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .post {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 500px;
+            margin: 0 auto;
+            margin-left: 70px;
+        }
+
+        .post p {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .post-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid #d0d0d0;
+            font-size: 14px;
+            color: #507299;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .post-footer a {
+            color: #507299;
+            text-decoration: none;
+        }
+
+        .post-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Футер — на всю ширину, фиксированный */
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #f5f5f5;
+            color: #507299;
+            font-size: 14px;
+            border-top: 1px solid #d0d0d0;
+            width: 100%;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 850px) {
+            .main-area {
+                flex-direction: column;
+                padding: 15px;
+            }
+
+            .sidebar {
+                width: 100%;
+                max-width: 500px;
+            }
+
+            .post {
+                min-height: 400px;
+                padding: 20px;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ШАПКА -->
+    <header>
+        <img src="logo.png" alt="Web Logo" class="logo-image">
+    </header>
+
+    <!-- ОСНОВНАЯ ОБЛАСТЬ (между шапкой и футером) -->
+    <div class="main-area">
+        <!-- ЛЕВОЕ МЕНЮ — тянется на всю высоту -->
+        <aside class="sidebar">
+            <ul>
+                <li><a href="#">Main page</a></li>
+                <li><a href="#">Secondary page</a></li>
+                <li><a href="#">Some other page</a></li>
+                <li><a href="#"  class="highlight">More pages to the god of pages</a></li>
+                <li><a href="#">The last page</a></li>
+            </ul>
+        </aside>
+
+        <!-- КОНТЕНТ -->
+        <div class="content">
+            <article class="post">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <div class="post-footer">
+                    <a href="#">Like</a>
+                    <a href="#">Comment</a>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <!-- ФУТЕР -->
+    <footer>
+        Simple footer (text in the center).
+    </footer>
+</body>
+</html>
