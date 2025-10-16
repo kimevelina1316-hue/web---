@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Frontend Task №7</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .header button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .container {
+            display: flex;
+            max-width: 800px;
+            margin: 0 auto;
+            gap: 10px;
+        }
+
+        .column {
+            flex: 1;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .left-column {
+            background-color: blue;
+            min-height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .right-column {
+            background-color: green;
+            min-height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        img {
+            max-width: 90%;
+            max-height: 250px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <button id="leftBtn">Левая колонка</button>
+        <button id="bothBtn">Обе две</button>
+        <button id="rightBtn">Правая колонка</button>
+    </div>
+
+    <div class="container">
+        <div class="column left-column" id="leftCol">
+            <img src="cat.jpg" alt="Кот">
+        </div>
+        <div class="column right-column" id="rightCol">
+            <img src="dog.jpg" alt="Собака">
+        </div>
+    </div>
+
+    <script>
+        // Получаем элементы
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+        const bothBtn = document.getElementById('bothBtn');
+        const leftCol = document.getElementById('leftCol');
+        const rightCol = document.getElementById('rightCol');
+
+        // Функции для управления видимостью
+        function showLeftOnly() {
+            leftCol.style.display = 'flex';
+            rightCol.style.display = 'none';
+        }
+
+        function showRightOnly() {
+            leftCol.style.display = 'none';
+            rightCol.style.display = 'flex';
+        }
+
+        function showBoth() {
+            leftCol.style.display = 'flex';
+            rightCol.style.display = 'flex';
+        }
+
+        // Назначаем обработчики событий
+        leftBtn.addEventListener('click', showLeftOnly);
+        rightBtn.addEventListener('click', showRightOnly);
+        bothBtn.addEventListener('click', showBoth);
+
+        // По умолчанию показываем обе колонки при загрузке
+        window.addEventListener('load', showBoth);
+    </script>
+
+</body>
+</html>
