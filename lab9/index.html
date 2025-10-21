@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Калькулятор</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .calculator {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            border: 2px solid #66b3ff;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .display {
+            width: 93,5%;
+            height: 50px;
+            font-size: 24px;
+            text-align: right;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: #f9f9f9;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+        }
+        button {
+            width: 100%;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            background-color: #eee;
+            border-radius: 5px;
+        }
+        .big-btn {
+            grid-row: span 2;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" class="display" id="display" value="0" readonly>
+        <div class="buttons">
+            <button onclick="inputDigit('7')">7</button>
+            <button onclick="inputDigit('8')">8</button>
+            <button onclick="inputDigit('9')">9</button>
+            <button onclick="inputOp('/')">/</button>
+            <button onclick="clearAll()">C</button>
+
+            <button onclick="inputDigit('4')">4</button>
+            <button onclick="inputDigit('5')">5</button>
+            <button onclick="inputDigit('6')">6</button>
+            <button onclick="inputOp('*')">*</button>
+            <button onclick="backspace()"><-</button>
+
+            <button onclick="inputDigit('1')">1</button>
+            <button onclick="inputDigit('2')">2</button>
+            <button onclick="inputDigit('3')">3</button>
+            <button class="big-btn" onclick="inputOp('-')">-</button>
+            <button class="big-btn" onclick="calculate()">=</button>
+
+            <button onclick="inputDigit('0')">0</button>
+            <button onclick="inputDigit('.')">.</button>
+            <button onclick="inputOp('+')">+</button>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let currentInput = '0';      // Текущее вводимое число
+        let pendingOperation = null; // Ожидающая операция (+, -, *, /)
+        let previousOperand = null;  // Первое число (левый операнд)
+        let waitingForOperand = false; // Флаг: ожидаем ввод второго числа?
+
+        function updateDisplay() {
+            display.value = currentInput;
+        }
+
+        function inputDigit(digit) {
+            if (waitingForOperand) {
+                currentInput = digit === '.' ? '0.' : digit;
+                waitingForOperand = false;
+            } else {
+                if (currentInput === '0' && digit !== '.') {
+                    currentInput = digit;
+                } else if (digit === '.' && currentInput.includes('.')) {
+                    return; // Не допускаем две точки
+                } else {
+                    currentInput += digit;
+                }
+            }
+            updateDisplay();
+        }
+
+        function inputOp(op) {
+            const inputValue = parseFloat(currentInput);
+
+            if (previousOperand === null) {
+                previousOperand = inputValue;
+            } else if (pendingOperation) {
+                const result = performCalculation();
+                previousOperand = result;
+                currentInput = String(result);
+            }
+
+            waitingForOperand = true;
+            pendingOperation = op;
+            currentInput = String(previousOperand) + ' ' + op + ' ';
+            updateDisplay();
+        }
+
+        function performCalculation() {
+            const now = parseFloat(currentInput);
+            if (isNaN(now)) return previousOperand;
+
+            switch (pendingOperation) {
+                case '+': return previousOperand + now;
+                case '-': return previousOperand - now;
+                case '*': return previousOperand * now;
+                case '/': 
+                    if (now === 0) {
+                        alert('Деление на ноль!');
+                        clearAll();
+                        return 0;
+                    }
+                    return previousOperand / now;
+                default: return now;
+            }
+        }
+
+        function calculate() {
+            if (pendingOperation === null || waitingForOperand) return;
+
+            const inputValue = parseFloat(currentInput);
+            let result;
+
+            if (previousOperand !== null) {
+                result = performCalculation();
+            } else {
+                result = inputValue;
+            }
+
+            currentInput = String(result);
+            pendingOperation = null;
+            previousOperand = null;
+            waitingForOperand = true;
+            updateDisplay();
+        }
+
+        function clearAll() {
+            currentInput = '0';
+            pendingOperation = null;
+            previousOperand = null;
+            waitingForOperand = false;
+            updateDisplay();
+        }
+
+        function backspace() {
+            if (currentInput.length > 1 && !currentInput.includes(' ')) {
+                currentInput = currentInput.slice(0, -1);
+            } else {
+                currentInput = '0';
+            }
+            updateDisplay();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторная работа №7</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+        input[type="number"] {
+            width: 60px;
+            padding: 5px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+        .shape {
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .square {
+            background-color: red;
+        }
+        .triangle {
+            background-color: blue;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+        .circle {
+            background-color: green;
+            border-radius: 50%;
+        }
+        .selected {
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8) inset;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <input type="number" id="countInput" min="1" value="5" placeholder="Количество">
+        <button id="addSquare">Квадрат</button>
+        <button id="addTriangle">Треугольник</button>
+        <button id="addCircle">Круг</button>
+    </div>
+
+    <script>
+        // Получаем элементы управления
+        const countInput = document.getElementById('countInput');
+        const addSquareBtn = document.getElementById('addSquare');
+        const addTriangleBtn = document.getElementById('addTriangle');
+        const addCircleBtn = document.getElementById('addCircle');
+
+        // Функция для генерации случайного числа в диапазоне [min, max]
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // Функция для создания фигуры
+        function createShape(type) {
+            const shape = document.createElement('div');
+            shape.className = `shape ${type}`;
+            
+            // Случайный размер от 30 до 150 пикселей
+            const size = getRandomInt(30, 150);
+            shape.style.width = `${size}px`;
+            shape.style.height = `${size}px`;
+
+            // Случайное положение (учитываем размер, чтобы не выйти за пределы экрана)
+            const maxX = window.innerWidth - size;
+            const maxY = window.innerHeight - size;
+            const posX = getRandomInt(0, maxX);
+            const posY = getRandomInt(0, maxY);
+
+            shape.style.left = `${posX}px`;
+            shape.style.top = `${posY}px`;
+
+            // Обработчик клика для выделения
+            shape.addEventListener('click', function() {
+                // Убираем выделение со всех фигур
+                document.querySelectorAll('.shape').forEach(el => el.classList.remove('selected'));
+                // Выделяем текущую
+                this.classList.add('selected');
+            });
+
+            // Обработчик двойного клика для удаления
+            shape.addEventListener('dblclick', function() {
+                this.remove();
+            });
+
+            // Добавляем фигуру в тело документа
+            document.body.appendChild(shape);
+        }
+
+        // Функция для добавления нескольких фигур
+        function addShapes(type, count) {
+            for (let i = 0; i < count; i++) {
+                createShape(type);
+            }
+        }
+
+        // Назначаем обработчики событий на кнопки
+        addSquareBtn.addEventListener('click', function() {
+            const count = parseInt(countInput.value) || 1;
+            addShapes('square', count);
+        });
+
+        addTriangleBtn.addEventListener('click', function() {
+            const count = parseInt(countInput.value) || 1;
+            addShapes('triangle', count);
+        });
+
+        addCircleBtn.addEventListener('click', function() {
+            const count = parseInt(countInput.value) || 1;
+            addShapes('circle', count);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторная работа №8</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 600px;
+        }
+        .item-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            background-color: white;
+        }
+        .item-name {
+            flex: 1;
+            margin-right: 10px;
+            padding: 3px;
+        }
+        .item-value {
+            width: 80px;
+            margin-right: 10px;
+            padding: 3px;
+        }
+        .controls {
+            display: flex;
+            gap: 5px;
+        }
+        button {
+            padding: 2px 5px;
+            cursor: pointer;
+        }
+        #saveOutput {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #eaeaea;
+            border: 1px solid #ddd;
+            word-wrap: break-word;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="itemsContainer">
+            <!-- Элементы будут добавляться сюда -->
+        </div>
+
+        <button id="addButton">Добавить элемент</button>
+        <button id="saveButton">Сохранить</button>
+
+        <div id="saveOutput"></div>
+    </div>
+
+    <script>
+        // Получаем элементы управления
+        const itemsContainer = document.getElementById('itemsContainer');
+        const addButton = document.getElementById('addButton');
+        const saveButton = document.getElementById('saveButton');
+        const saveOutput = document.getElementById('saveOutput');
+
+        // Счетчик для генерации уникальных идентификаторов
+        let itemCounter = 0;
+
+        // Функция для создания новой строки элемента
+        function createItemRow(name = '', value = '') {
+            const row = document.createElement('div');
+            row.className = 'item-row';
+
+            // Генерируем уникальный ID для строки
+            const itemId = `item-${itemCounter++}`;
+
+            // Поле для названия
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.className = 'item-name';
+            nameInput.value = name;
+            nameInput.placeholder = 'Название...';
+
+            // Поле для значения
+            const valueInput = document.createElement('input');
+            valueInput.type = 'text'; // Используем text, чтобы можно было вводить любые символы
+            valueInput.className = 'item-value';
+            valueInput.value = value;
+            valueInput.placeholder = 'Значение...';
+
+            // Контейнер для кнопок управления
+            const controlsDiv = document.createElement('div');
+            controlsDiv.className = 'controls';
+
+            // Кнопка вверх
+            const upButton = document.createElement('button');
+            upButton.textContent = '↑';
+            upButton.addEventListener('click', function() {
+                moveItemUp(row);
+            });
+
+            // Кнопка вниз
+            const downButton = document.createElement('button');
+            downButton.textContent = '↓';
+            downButton.addEventListener('click', function() {
+                moveItemDown(row);
+            });
+
+            // Кнопка удаления
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'x';
+            deleteButton.addEventListener('click', function() {
+                row.remove();
+            });
+
+            // Добавляем кнопки в контейнер
+            controlsDiv.appendChild(upButton);
+            controlsDiv.appendChild(downButton);
+            controlsDiv.appendChild(deleteButton);
+
+            // Добавляем все элементы в строку
+            row.appendChild(nameInput);
+            row.appendChild(valueInput);
+            row.appendChild(controlsDiv);
+
+            return row;
+        }
+
+        // Функция для перемещения элемента вверх
+        function moveItemUp(row) {
+            const prevRow = row.previousElementSibling;
+            if (prevRow) {
+                itemsContainer.insertBefore(row, prevRow);
+            }
+        }
+
+        // Функция для перемещения элемента вниз
+        function moveItemDown(row) {
+            const nextRow = row.nextElementSibling;
+            if (nextRow) {
+                itemsContainer.insertBefore(nextRow, row);
+            }
+        }
+
+        // Обработчик для кнопки "Добавить элемент"
+        addButton.addEventListener('click', function() {
+            const newRow = createItemRow();
+            itemsContainer.appendChild(newRow);
+        });
+
+        // Обработчик для кнопки "Сохранить"
+        saveButton.addEventListener('click', function() {
+            const data = {};
+            const rows = itemsContainer.querySelectorAll('.item-row');
+
+            rows.forEach(row => {
+                const nameInput = row.querySelector('.item-name');
+                const valueInput = row.querySelector('.item-value');
+                const name = nameInput.value.trim();
+                const value = valueInput.value.trim();
+
+                // Если название не пустое, добавляем в объект
+                if (name) {
+                    data[name] = value;
+                }
+            });
+
+            // Преобразуем объект в JSON и выводим в div
+            saveOutput.textContent = JSON.stringify(data, null, 2);
+        });
+    </script>
+</body>
+</html>
