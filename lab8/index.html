@@ -152,26 +152,23 @@
             itemsContainer.appendChild(newRow);
         });
 
-        // Обработчик для кнопки "Сохранить"
         saveButton.addEventListener('click', function() {
-            const data = {};
-            const rows = itemsContainer.querySelectorAll('.item-row');
+    const data = [];
+    const rows = itemsContainer.querySelectorAll('.item-row');
 
-            rows.forEach(row => {
-                const nameInput = row.querySelector('.item-name');
-                const valueInput = row.querySelector('.item-value');
-                const name = nameInput.value.trim();
-                const value = valueInput.value.trim();
+    rows.forEach(row => {
+        const nameInput = row.querySelector('.item-name');
+        const valueInput = row.querySelector('.item-value');
+        const name = nameInput.value.trim();
+        const value = valueInput.value.trim();
 
-                // Если название не пустое, добавляем в объект
-                if (name) {
-                    data[name] = value;
-                }
-            });
+        if (name !== '' || value !== '') {
+            data.push([name, value]); // просто массив из двух элементов
+        }
+    });
 
-            // Преобразуем объект в JSON и выводим в div
-            saveOutput.textContent = JSON.stringify(data, null, 2);
-        });
+    saveOutput.textContent = JSON.stringify(data, null, 2);
+});
     </script>
 </body>
 </html>
